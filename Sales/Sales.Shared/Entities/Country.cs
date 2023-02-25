@@ -7,9 +7,9 @@ namespace Sales.Shared.Entities
         public int Id { get; set; } // Codigo del país
 
         // DATANOTATION
-        [Display(Name = "País")]
+        [Display(Name = "Categoría")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        [MaxLength(100,ErrorMessage = "El campo {0} no puede tener más de {1} caracteres ")]
+        [MaxLength(200,ErrorMessage = "El campo {0} no puede tener más de {1} caracteres ")]
         public string Name { get; set; } = null!;
     }
 }
