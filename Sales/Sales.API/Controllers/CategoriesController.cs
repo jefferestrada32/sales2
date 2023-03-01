@@ -37,18 +37,56 @@ namespace Sales.API.Controllers
         // ActionResult es el resultado de la petición
         public async Task<ActionResult> PostAsync(Category category)
         {
-            _context.Add(category);
-            await _context.SaveChangesAsync();
-            return Ok(category);
+            
+            try
+            {
+                _context.Add(category);
+                await _context.SaveChangesAsync();
+                return Ok(category);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("Ya existe un registro con el mismo nombre.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpPut]
         // ActionResult es el resultado de la petición
         public async Task<ActionResult> PutAsync(Category category)
         {
-            _context.Update(category);
-            await _context.SaveChangesAsync();
-            return Ok(category);
+            try
+            {
+                _context.Update(category);
+                await _context.SaveChangesAsync();
+                return Ok(category);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException!.Message.Contains("duplicate"))
+                {
+                    return BadRequest("Ya existe un registro con el mismo nombre.");
+                }
+                else
+                {
+                    return BadRequest(dbUpdateException.InnerException.Message);
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+
         }
 
         [HttpDelete("{id:int}")]
