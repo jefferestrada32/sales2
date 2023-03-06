@@ -20,11 +20,11 @@
                 {
                     <tr>
                         <td>
-                            <a class="btn btn-warning" href="/Categories/edit/@category.Id">Editar</a>
-                            <button class="btn btn-danger" @onclick=@(()=> DeleteAsync(category))>Borrar</button>
+                            @category.Name
                         </td>
                         <td>
-                            @category.Name
+                            <a class="btn btn-warning" href="/Categories/edit/@category.Id">Editar</a>
+                            <button class="btn btn-danger" @onclick=@(()=> DeleteAsync(category))>Borrar</button>
                         </td>
                     </tr>
                 }
