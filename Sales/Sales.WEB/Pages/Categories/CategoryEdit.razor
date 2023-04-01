@@ -20,11 +20,15 @@ else
     private CategoryForm? categoryForm;
 
     [Parameter]
-    public int Id { get; set; }
+    public int CategoryId { get; set; }
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.Get<Category>($"api/categories/{Id}");
+        var responseHttp = await repository.Get<Category>($"api/categories/{CategoryId}");
         if (responseHttp.Error)
         {
             if (responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -48,8 +52,8 @@ else
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
-        categoryForm!.FormPostedSuccess = true;
-        navigationManager.NavigateTo("/categories");
+         await BlazoredModal.CloseAsync(ModalResult.Ok());
+        Return();
     }
 
     private void Return()

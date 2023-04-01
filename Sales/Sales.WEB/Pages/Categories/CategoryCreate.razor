@@ -8,6 +8,11 @@
 <CategoryForm @ref="categoryForm" Category="category" OnValidSubmit="Create" ReturnAction="Return" />
 
 @code {
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+
     private Category category = new();
     private CategoryForm? categoryForm;
 
@@ -20,8 +25,9 @@
             await sweetAlertService.FireAsync("Error", message);
             return;
         }
-        categoryForm!.FormPostedSuccess = true;
-        navigationManager.NavigateTo("/categories");
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+        Return();
+
     }
 
     private void Return()
