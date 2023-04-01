@@ -133,5 +133,15 @@ namespace Sales.API.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        [AllowAnonymous]
+        [HttpGet("combo/{countryId:int}")]
+        public async Task<ActionResult> GetCombo(int countryId)
+        {
+            return Ok(await _context.States
+                .Where(x => x.CountryId == countryId)
+                .ToListAsync());
+        }
+
     }
 }
