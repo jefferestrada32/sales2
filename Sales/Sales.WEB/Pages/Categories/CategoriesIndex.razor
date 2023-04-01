@@ -2,12 +2,13 @@
 @inject IRepository repository
 @inject SweetAlertService sweetAlertService
 @inject NavigationManager navigationManager
+@attribute [Authorize(Roles = "Admin")]
 
 <h3 class="text-lg-center">Categorias</h3>
 
 <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
     <div>
-        <a class="btn btn-primary" href="/countries/create">Nuevo País</a>
+        <a class="btn btn-primary" href="/categories/create">Crear categoria</a>
     </div>
     <div class="mx-2">
         <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar una categoria..." @bind-value="Filter" />
@@ -25,7 +26,7 @@
 
 
 
-<a class="btn btn-primary" href="/categories/create">Crear categoria</a>
+
 
 <GenericList MyList="Categories">
     <Body>
