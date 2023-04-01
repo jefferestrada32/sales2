@@ -22,6 +22,10 @@ else
     [Parameter]
     public int StateId { get; set; }
 
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+
     protected override async Task OnInitializedAsync()
     {
         var responseHttp = await repository.Get<State>($"/api/states/{StateId}");
@@ -51,7 +55,9 @@ else
             return;
         }
 
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
         Return();
+
     }
 
     private void Return()

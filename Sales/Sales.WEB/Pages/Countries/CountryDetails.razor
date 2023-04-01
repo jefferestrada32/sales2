@@ -1,4 +1,5 @@
 ﻿@page "/countries/details/{Id:int}"
+@using Sales.WEB.Pages.States;
 @inject IRepository repository
 @inject NavigationManager navigationManager
 @inject SweetAlertService sweetAlertService
@@ -13,7 +14,7 @@ else
 
     <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
         <div>
-            <a class="btn btn-primary" href="/states/create/@country.Id">Nuevo Estado/Departamento</a>
+            <a class="btn btn-sm btn-primary float-end" @onclick=@(() => ShowModal(country.Id, false))><i class="oi oi-plus"></i> Nuevo Estado/Departamento</a>
             <a class="btn btn-success" href="/countries">Regresar</a>
         </div>
         <div class="mx-2">
@@ -51,7 +52,7 @@ else
                             </td>
                             <td>
                                 <a class="btn btn-info" href="/states/details/@state.Id">Detalles</a>
-                                <a class="btn btn-warning" href="/states/edit/@state.Id">Editar</a>
+                                <a @onclick=@(() => ShowModal(state.Id, true)) class="btn btn-warning"><i class="oi oi-pencil" /> Editar</a>
                                 <button class="btn btn-danger" @onclick=@(() => DeleteAsync(state.Id))>Borrar</button>
                             </td>
                         </tr>
@@ -79,6 +80,10 @@ else
     [SupplyParameterFromQuery]
     public string Filter { get; set; } = "";
 
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+
     protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
@@ -89,6 +94,27 @@ else
         currentPage = page;
         await LoadAsync(page);
     }
+
+    private async Task ShowModal(int id = 0, bool isEdit = false)
+    {
+        IModalReference modalReference;
+
+        if (isEdit)
+        {
+            modalReference = Modal.Show<EditState>(string.Empty, new ModalParameters().Add("StateId", id));
+        }
+        else
+        {
+            modalReference = Modal.Show<StateCreate>(string.Empty, new ModalParameters().Add("CountryId", id));
+        }
+
+        var result = await modalReference.Result;
+        if (result.Confirmed)
+        {
+            await LoadAsync();
+        }
+    }
+
 
     private async Task LoadAsync(int page = 1)
     {

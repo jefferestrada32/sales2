@@ -17,7 +17,7 @@ else
             <div class="card-header">
                 <span>
                     <i class="oi oi-person" /> Editar Usuario
-                    <a class="btn btn-sm btn-secondary float-end" href="/changePassword"><i class="oi oi-key" /> Cambiar Contraseña</a>
+                    <a class="btn btn-sm btn-secondary float-end" @onclick=@(() => ShowModal())><i class="oi oi-key" /> Cambiar Contraseña</a>
                     <button class="btn btn-sm btn-primary float-end mx-2" type="submit"><i class="oi oi-check" /> Guardar Cambios</button>
                 </span>
             </div>
@@ -118,6 +118,10 @@ else
 }
 
 @code {
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
+
+
     private User? user;
     private List<Country>? countries;
     private List<State>? states;
@@ -138,6 +142,18 @@ else
         }
 
     }
+
+    private async Task ShowModal()
+    {
+        IModalReference modalReference;
+
+        modalReference = Modal.Show<ChangePassword>();
+       
+        var result = await modalReference.Result;
+        
+    }
+
+
 
     private async Task LoadUserAsyc()
     {

@@ -19,11 +19,15 @@ else
     private CountryForm? countryForm;
 
     [Parameter]
-    public int Id { get; set; }
+    public int CountryId { get; set; }
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
 
     protected override async Task OnInitializedAsync()
     {
-        var responseHttp = await repository.Get<Country>($"api/countries/{Id}");
+        var responseHttp = await repository.Get<Country>($"api/countries/{CountryId}");
         if (responseHttp.Error)
         {
             if(responseHttp.HttpResponseMessage.StatusCode == HttpStatusCode.NotFound)
@@ -47,8 +51,9 @@ else
             await sweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
             return;
         }
-        countryForm!.FormPostedSuccess = true;
-        navigationManager.NavigateTo("/countries");
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+        Return();
+
     }
 
     private void Return()

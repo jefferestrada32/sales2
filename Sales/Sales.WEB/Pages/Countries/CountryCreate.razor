@@ -8,6 +8,10 @@
 <CountryForm @ref="countryForm" Country="country" OnValidSubmit="Create" ReturnAction="Return"/>
 
 @code {
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+
     private Country country= new();
     private CountryForm? countryForm;
 
@@ -20,8 +24,9 @@
             await sweetAlertService.FireAsync("Error", message);
             return;
         }
-        countryForm!.FormPostedSuccess = true;
-        navigationManager.NavigateTo("/countries");
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+        Return();
+
     }
 
     private void Return()
